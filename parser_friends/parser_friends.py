@@ -1,8 +1,11 @@
 import vk_api
 import re
+import json
 import pandas as pd
 from tqdm import tqdm
 from datetime import datetime
+
+good_extension = ['csv', 'json', 'tsv']
 
 
 class ParserFriends:
@@ -26,24 +29,38 @@ class ParserFriends:
     convert_birth_day():
         Конвертирует день рождение пользователя в ISO формат
     """
-    def __init__(self, token: str) -> None:
-        self.session = vk_api.VkApi(token=token)
-
-    def __call__(self, user_id: int,
-                 path_to_save: str,
+    def __init__(self, token: str,
+                 user_id: int,
                  extension_file: str = 'csv') -> None:
         '''
-        Записывает данные пользователей в .csv формат
+        Инициализирует необходимые переменные.
 
                 Параметры:
+                        token (str): Авторизационный токен
                         user_id (int): ID пользователя
                         path_to_save (str): Путь к выходному файлу
-                        extension_file (str): Формат выходного файла
 
                 Возвращаемое значение:
                         None
         '''
-        friends = self.get_friends(user_id)
+        self.session = vk_api.VkApi(token=token)
+        self.user_id = user_id
+        self.extension_file = extension_file
+
+        assert self.extension_file in good_extension, \
+               f'Доступные форматы для выходного файла: {good_extension}'
+
+    def __call__(self, path_to_save: str) -> None:
+        '''
+        Записывает данные пользователей в .csv формат
+
+                Параметры:
+                        path_to_save (str): Путь к выходному файлу
+
+                Возвращаемое значение:
+                        None
+        '''
+        friends = self.get_friends(self.user_id)
 
         result_dict = {}
         for i in tqdm(range(len(friends['items'])), desc='Progress:'):
@@ -81,12 +98,7 @@ class ParserFriends:
                               'bdate': bdate,
                               'sex': sex}
 
-        if extension_file == 'csv':
-            path_to_save = f'{path_to_save}.csv'
-
-            df = pd.DataFrame.from_dict(result_dict, orient='index')
-            df.sort_values('first_name', inplace=True)
-            df.to_csv(path_to_save, index=False)
+        self.load_to_file(result_dict, path_to_save)
 
     def get_friends(self, user_id: int) -> dict:
         '''
@@ -123,3 +135,24 @@ class ParserFriends:
             date = str(date)[5:10]
 
         return date
+
+    def load_to_file(self, data: dict, path_to_save) -> None:
+        if self.extension_file == 'csv':
+            path_to_save = f'{path_to_save}.csv'
+
+            df = pd.DataFrame.from_dict(data, orient='index')
+            df.sort_values('first_name', inplace=True)
+            df.to_csv(path_to_save, index=False)
+        elif self.extension_file == 'json':
+            path_to_save = f'{path_to_save}.json'
+            sorted_dict = dict(sorted(data.items(),
+                               key=lambda x: x[1].get('first_name')))
+
+            with open(path_to_save, 'w', encoding='utf-8') as outfile:
+                json.dump(sorted_dict, outfile, ensure_ascii=False, indent=4)
+        else:
+            path_to_save = f'{path_to_save}.tsv'
+
+            df = pd.DataFrame.from_dict(data, orient='index')
+            df.sort_values('first_name', inplace=True)
+            df.to_csv(path_to_save, sep='\t', index=False)
