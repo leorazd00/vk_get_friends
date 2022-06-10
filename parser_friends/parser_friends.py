@@ -98,7 +98,7 @@ class ParserFriends:
                               'bdate': bdate,
                               'sex': sex}
 
-        self.load_to_file(result_dict, path_to_save)
+        self.write_to_file(result_dict, path_to_save)
 
     def get_friends(self, user_id: int) -> dict:
         '''
@@ -136,7 +136,7 @@ class ParserFriends:
 
         return date
 
-    def load_to_file(self, data: dict, path_to_save) -> None:
+    def write_to_file(self, data: dict, path_to_save) -> None:
         if self.extension_file == 'csv':
             path_to_save = f'{path_to_save}.csv'
 
