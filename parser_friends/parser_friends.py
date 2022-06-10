@@ -1,7 +1,8 @@
 import vk_api
-import os
+import re
 import pandas as pd
 from tqdm import tqdm
+from datetime import datetime
 
 
 class ParserFriends:
@@ -30,6 +31,7 @@ class ParserFriends:
 
             try:
                 bdate = friends['items'][i]['bdate']
+                bdate = self.convert_birth_day(bdate)
             except KeyError:
                 bdate = "NULL"
 
@@ -40,23 +42,36 @@ class ParserFriends:
             elif sex == 2:
                 sex = 'мужской'
             else:
-                sex == 'не указано'
+                sex = 'не указано'
 
-            dict_info = {'first_name': first_name, 
-                        'last_name': last_name, 
-                        'country': country, 
-                        'city': city, 
-                        'bdate': bdate, 
-                        'sex': sex}
-
-            result_dict[i] = dict_info
+            result_dict[i] = {'first_name': first_name, 
+                              'last_name': last_name, 
+                              'country': country, 
+                              'city': city, 
+                              'bdate': bdate, 
+                              'sex': sex}
 
         if extension_file == 'csv':
             path_to_save = f'{path_to_save}.csv'
 
             df = pd.DataFrame.from_dict(result_dict, orient='index')
+            df.sort_values('first_name', inplace=True)
             df.to_csv(path_to_save, index=False)
 
     
     def get_friends(self, user_id: int) -> dict:
         return self.session.method('friends.get', {'user_id': user_id, 'fields': 'country, bdate, city, sex'})
+
+    def convert_birth_day(self, b_day: str):
+        r = len(re.findall(r'[.]', b_day))
+        
+        if r == 2:
+            date = datetime.strptime(b_day, '%d.%m.%Y')
+            date.isoformat()
+            date = str(date)[:10]
+        else:
+            date = datetime.strptime(b_day, '%d.%m')
+            date.isoformat()
+            date = str(date)[5:10]
+
+        return date
