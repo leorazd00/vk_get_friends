@@ -20,3 +20,8 @@ pip install -r requirements.txt
 ```bash 
 python -m run --token {ваш токен} --user_id {ID пользователя} --file_extension {формат выходного файла} --path_to_save {путь к выходному файлу}
 ```
+## Получение access token
+1. Перейдите по этой ссылке [vkhost.github.io](https://vkhost.github.io/)
+2. Нажмите на вкладку настройки, там выбирите только "Друзья"
+3. Затем нажмите "разрешить"
+4. Скопируйте часть адресной строки от _access_token=_ до _&expires_in_
