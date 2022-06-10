@@ -8,9 +8,8 @@
 
 Первым делом нужно установить необходимые зависимости:
 
-'''python
+'''{python} 
 pip install -r requirements.txt
-
 '''
 
 ---
