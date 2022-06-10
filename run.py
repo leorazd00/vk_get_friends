@@ -15,5 +15,6 @@ args = parser.parse_args()
 
 
 if __name__ == '__main__':
+    print('Connecting to vk_api...')
     parse_data = ParserFriends(args.token)
     parse_data(args.user_id, args.path_to_save, extension_file=args.file_extension)

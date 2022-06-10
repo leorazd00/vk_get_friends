@@ -18,6 +18,8 @@ class ParserFriends:
 
     Методы
     ------
+    __call__():
+        При вызове записывает данные пользователей в .csv формат
     get_friends():
         Возвращает словарь с данными пользователей Vk
     convert_birth_day():
@@ -43,7 +45,7 @@ class ParserFriends:
         
 
         result_dict = {}
-        for i in tqdm(range(len(friends['items']))):
+        for i in tqdm(range(len(friends['items'])), desc='Progress:'):
             first_name = friends['items'][i]['first_name']
             last_name = friends['items'][i]['last_name']
 
