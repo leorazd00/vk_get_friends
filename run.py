@@ -8,10 +8,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--token', help='Your authorized token', type=str)
 parser.add_argument('--user_id', help='User ID for which the report is being generated', type=int)
 parser.add_argument('--file_extension', help='Output file format', nargs='?', type=str, default='csv')
-parser.add_argument('--path_to_save', help='Path to the output file', nargs='?', 
+parser.add_argument('--path_to_save', help='Path to the output file', nargs='?',
                     type=str, default=f'{os.getcwd()}/report')
 
-args = parser.parse_args() 
+args = parser.parse_args()
 
 
 if __name__ == '__main__':

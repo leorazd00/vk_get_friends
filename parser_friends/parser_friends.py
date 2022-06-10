@@ -7,9 +7,10 @@ from datetime import datetime
 
 class ParserFriends:
     """
-    Класс представляет возможность получить спиок друзей из соц. сети Vk в формате .csv
+    Класс представляет возможность получить спиок друзей
+    из соц. сети Vk в формате .csv
 
-    ...
+    --------
 
     Атрибуты
     --------
@@ -28,8 +29,9 @@ class ParserFriends:
     def __init__(self, token: str) -> None:
         self.session = vk_api.VkApi(token=token)
 
-
-    def __call__(self, user_id: int, path_to_save: str, extension_file: str='csv') -> None:
+    def __call__(self, user_id: int,
+                 path_to_save: str,
+                 extension_file: str = 'csv') -> None:
         '''
         Записывает данные пользователей в .csv формат
 
@@ -42,7 +44,6 @@ class ParserFriends:
                         None
         '''
         friends = self.get_friends(user_id)
-        
 
         result_dict = {}
         for i in tqdm(range(len(friends['items'])), desc='Progress:'):
@@ -53,7 +54,6 @@ class ParserFriends:
                 country = friends['items'][i]['country']['title']
             except KeyError:
                 country = "NULL"
-            
             try:
                 city = friends['items'][i]['city']['title']
             except KeyError:
@@ -74,11 +74,11 @@ class ParserFriends:
             else:
                 sex = 'не указано'
 
-            result_dict[i] = {'first_name': first_name, 
-                              'last_name': last_name, 
-                              'country': country, 
-                              'city': city, 
-                              'bdate': bdate, 
+            result_dict[i] = {'first_name': first_name,
+                              'last_name': last_name,
+                              'country': country,
+                              'city': city,
+                              'bdate': bdate,
                               'sex': sex}
 
         if extension_file == 'csv':
@@ -88,7 +88,6 @@ class ParserFriends:
             df.sort_values('first_name', inplace=True)
             df.to_csv(path_to_save, index=False)
 
-    
     def get_friends(self, user_id: int) -> dict:
         '''
         Возвращает словарь с данными пользователей Vk.
@@ -97,9 +96,11 @@ class ParserFriends:
                         user_id (int): ID пользователя
 
                 Возвращаемое значение:
-                        return (dict): словарь с данными пользователя Vk 
+                        return (dict): словарь с данными пользователя Vk
         '''
-        return self.session.method('friends.get', {'user_id': user_id, 'fields': 'country, bdate, city, sex'})
+        dict_fields = {'fields': 'country, bdate, city, sex'}
+        return self.session.method('friends.get', {'user_id': user_id,
+                                                   'fields': dict_fields['fields']})
 
     def convert_birth_day(self, b_day: str) -> str:
         '''
@@ -112,7 +113,6 @@ class ParserFriends:
                         date (str): дата рождения в ISO формате.
         '''
         r = len(re.findall(r'[.]', b_day))
-        
         if r == 2:
             date = datetime.strptime(b_day, '%d.%m.%Y')
             date.isoformat()
