@@ -41,25 +41,19 @@ class ParserFriends:
             else:
                 sex == 'не указано'
 
-            dict_info =  {'first_name': first_name, 
-                          'last_name': last_name, 
-                          'country': country, 
-                          'city': city, 
-                          'bdate': bdate, 
-                          'sex': sex}
+            dict_info = {'first_name': first_name, 
+                        'last_name': last_name, 
+                        'country': country, 
+                        'city': city, 
+                        'bdate': bdate, 
+                        'sex': sex}
 
             result_dict[i] = dict_info
 
-            df = pd.DataFrame.from_dict(result_dict, orient='index')
-            df.to_csv(path_to_save, index=False)
+        df = pd.DataFrame.from_dict(result_dict, orient='index')
+        df.to_csv(path_to_save, index=False)
+
 
     
     def get_friends(self, user_id: int) -> dict:
         return self.session.method('friends.get', {'user_id': user_id, 'fields': 'country, bdate, city, sex'})
-
-
-# if __name__ == '__main__':
-#     token = 'vk1.a.dtU4jnh2_9diKVlPON44jfERpyncUYGyRk0T52CG5hlwbSkb9X1tpl8rqEP4xxJZh23xGs8Xq_9HRAayg8AgkvIANw0zC4c6tZWR-eTp2cYSNOhbh5I7DQy6YOwltlEqHFaAM_tsQwAfM81BHwzZOWjrtHFFQIE0_2Hp0-b3Ue02E7dbHHEfbIV0o5V_XCAz'
-    
-#     parse_data = parser_friends(token)
-#     parse_data(248042549, 'D:/vk_get_friends/ivan_guy.csv')
