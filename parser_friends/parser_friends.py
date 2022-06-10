@@ -9,8 +9,9 @@ class ParserFriends:
         self.session = vk_api.VkApi(token=token)
 
 
-    def __call__(self, user_id: int, path_to_save: str) -> None:
+    def __call__(self, user_id: int, path_to_save: str, extension_file: str='csv') -> None:
         friends = self.get_friends(user_id)
+        
 
         result_dict = {}
         for i in tqdm(range(len(friends['items']))):
@@ -50,9 +51,11 @@ class ParserFriends:
 
             result_dict[i] = dict_info
 
-        df = pd.DataFrame.from_dict(result_dict, orient='index')
-        df.to_csv(path_to_save, index=False)
+        if extension_file == 'csv':
+            path_to_save = f'{path_to_save}.csv'
 
+            df = pd.DataFrame.from_dict(result_dict, orient='index')
+            df.to_csv(path_to_save, index=False)
 
     
     def get_friends(self, user_id: int) -> dict:

@@ -1,5 +1,3 @@
- # 248042549
-# vk1.a.ashTijvMSvw7z6fj166-xrMOWbX4pJoZjbxyH04sL_ZIv0aU4wspsq-7nlo5blF-XEwins3_WXPN6NqagH9OQWBvzNha9TbTeZWuvkX6e4BzqIcCUxcJKoX8iwPJ3w0CLCSnDmpA3fZeQwU4b5Q6-FRGzc_MTbXkr1f9Tpt0HVXHk0Y5xps1MPpRZVVNQs5e
 import os
 import argparse
 from parser_friends import ParserFriends
