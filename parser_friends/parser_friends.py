@@ -13,21 +13,19 @@ class ParserFriends:
     Класс представляет возможность получить спиок друзей
     из соц. сети Vk в формате .csv
 
-    --------
+        Атрибуты
+        --------
+        token : str
+            Авторизационный токен
 
-    Атрибуты
-    --------
-    token : str
-        Авторизационный токен
-
-    Методы
-    ------
-    __call__():
-        При вызове записывает данные пользователей в .csv формат
-    get_friends():
-        Возвращает словарь с данными пользователей Vk
-    convert_birth_day():
-        Конвертирует день рождение пользователя в ISO формат
+        Методы
+        ------
+        __call__():
+            При вызове записывает данные пользователей в .csv формат
+        get_friends():
+            Возвращает словарь с данными пользователей Vk
+        convert_birth_day():
+            Конвертирует день рождение пользователя в ISO формат
     """
     def __init__(self, token: str,
                  user_id: int,
@@ -136,7 +134,7 @@ class ParserFriends:
 
         return date
 
-    def write_to_file(self, data: dict, path_to_save) -> None:
+    def write_to_file(self, data: dict, path_to_save: str) -> None:
         if self.extension_file == 'csv':
             path_to_save = f'{path_to_save}.csv'
 
