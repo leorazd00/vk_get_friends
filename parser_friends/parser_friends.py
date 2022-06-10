@@ -6,11 +6,39 @@ from datetime import datetime
 
 
 class ParserFriends:
+    """
+    Класс представляет возможность получить спиок друзей из соц. сети Vk в формате .csv
+
+    ...
+
+    Атрибуты
+    --------
+    token : str
+        Авторизационный токен
+
+    Методы
+    ------
+    get_friends():
+        Возвращает словарь с данными пользователей Vk
+    convert_birth_day():
+        Конвертирует день рождение пользователя в ISO формат
+    """
     def __init__(self, token: str) -> None:
         self.session = vk_api.VkApi(token=token)
 
 
     def __call__(self, user_id: int, path_to_save: str, extension_file: str='csv') -> None:
+        '''
+        Записывает данные пользователей в .csv формат
+
+                Параметры:
+                        user_id (int): ID пользователя
+                        path_to_save (str): Путь к выходному файлу
+                        extension_file (str): Формат выходного файла
+
+                Возвращаемое значение:
+                        None
+        '''
         friends = self.get_friends(user_id)
         
 
@@ -60,9 +88,27 @@ class ParserFriends:
 
     
     def get_friends(self, user_id: int) -> dict:
+        '''
+        Возвращает словарь с данными пользователей Vk.
+
+                Параметры:
+                        user_id (int): ID пользователя
+
+                Возвращаемое значение:
+                        return (dict): словарь с данными пользователя Vk 
+        '''
         return self.session.method('friends.get', {'user_id': user_id, 'fields': 'country, bdate, city, sex'})
 
-    def convert_birth_day(self, b_day: str):
+    def convert_birth_day(self, b_day: str) -> str:
+        '''
+        Возвращает дату рождения в ISO формате.
+
+                Параметры:
+                        b_day (str): дата рождения в формате dd.mm или dd.mm.yy
+
+                Возвращаемое значение:
+                        date (str): дата рождения в ISO формате.
+        '''
         r = len(re.findall(r'[.]', b_day))
         
         if r == 2:
