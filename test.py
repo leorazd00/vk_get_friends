@@ -3,7 +3,7 @@ from parser_friends import ParserFriends
 
 
 class TestParserFriends(unittest.TestCase):
-    
+
     def setUp(self):
         self.parse_friends = ParserFriends(token='')
 
@@ -13,10 +13,6 @@ class TestParserFriends(unittest.TestCase):
 
         self.assertEqual(str(type(convert1)), "<class 'str'>")
         self.assertEqual(str(type(convert2)), "<class 'str'>")
-
-    def test_(self,):
-        pass
-
 
 
 if __name__ == '__main__':
