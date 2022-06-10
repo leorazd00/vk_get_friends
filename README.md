@@ -1,1 +1,1 @@
-# vk_get_friends
+# VK get friends
