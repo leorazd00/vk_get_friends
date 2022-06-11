@@ -11,22 +11,9 @@ good_extension = ['csv', 'json', 'tsv']
 class ParserFriends:
     """
     Класс представляет возможность получить спиок друзей
-    из соц. сети Vk в формате .csv
-
-        Атрибуты
-        --------
-        token : str
-            Авторизационный токен
-
-        Методы
-        ------
-        __call__():
-            При вызове записывает данные пользователей в .csv формат
-        get_friends():
-            Возвращает словарь с данными пользователей Vk
-        convert_birth_day():
-            Конвертирует день рождение пользователя в ISO формат
+    из соц. сети Vk в формате csv, json, tsv.
     """
+
     def __init__(self, token: str,
                  user_id: int,
                  extension_file: str = 'csv') -> None:
@@ -134,6 +121,16 @@ class ParserFriends:
         return date
 
     def write_to_file(self, data: dict, path_to_save: str) -> None:
+        '''
+        Записывет информацию о пользователях в нужный формат.
+
+                Параметры:
+                        data (dict): словарь с инф. о пользователях
+                        path_to_save (str): путь для сохранения файла
+
+                Возвращаемое значение:
+                        None
+        '''
         if self.extension_file == 'csv':
             path_to_save = f'{path_to_save}.csv'
 
