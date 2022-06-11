@@ -4,5 +4,6 @@ venv/
 *.csv
 *.txt
 *.json
+*.tsv
 
 *.pyc
