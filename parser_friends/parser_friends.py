@@ -10,7 +10,7 @@ good_extension = ['csv', 'json', 'tsv']
 
 class ParserFriends:
     """
-    Класс представляет возможность получить спиок друзей
+    Класс представляет возможность получить список друзей
     из соц. сети Vk в формате csv, json, tsv.
     """
 
@@ -37,7 +37,7 @@ class ParserFriends:
 
     def __call__(self, path_to_save: str) -> None:
         '''
-        Записывает данные пользователей в .csv формат
+        Записывает данные пользователей в одном из доступных форматов
 
                 Параметры:
                         path_to_save (str): Путь к выходному файлу
@@ -93,7 +93,7 @@ class ParserFriends:
                         user_id (int): ID пользователя
 
                 Возвращаемое значение:
-                        return (dict): словарь с данными пользователя Vk
+                        return (dict): словарь с данными пользователей Vk
         '''
         dict_args = {'user_id': user_id, 'fields': 'country, bdate, city, sex'}
         return self.session.method('friends.get', dict_args)
