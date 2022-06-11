@@ -23,7 +23,7 @@ class ParserFriends:
                 Параметры:
                         token (str): Авторизационный токен
                         user_id (int): ID пользователя
-                        path_to_save (str): Путь к выходному файлу
+                        extension_file (str): Формат выходного файла
 
                 Возвращаемое значение:
                         None
@@ -48,7 +48,7 @@ class ParserFriends:
         friends = self.get_friends(self.user_id)
 
         result_dict = {}
-        for i in tqdm(range(len(friends)), desc='Progress:'):
+        for i in tqdm(range(len(friends)), desc='Progress'):
             first_name = friends[i]['first_name']
             last_name = friends[i]['last_name']
 
@@ -87,7 +87,7 @@ class ParserFriends:
 
     def get_friends(self, user_id: int) -> list:
         '''
-        Возвращает словарь с данными пользователей Vk.
+        Возвращает список словарей с данными пользователей Vk.
 
                 Параметры:
                         user_id (int): ID пользователя
@@ -119,11 +119,11 @@ class ParserFriends:
         r = len(re.findall(r'[.]', b_day))
         if r == 2:
             try:
-                # Высокосный год
                 date = datetime.strptime(b_day, '%d.%m.%Y')
                 date.isoformat()
                 date = str(date)[:10]
             except ValueError:
+                # Высокосный год
                 year = b_day[:-5:-1]
                 date = f'{year}-29-02'
         else:
@@ -132,6 +132,7 @@ class ParserFriends:
                 date.isoformat()
                 date = str(date)[5:10]
             except ValueError:
+                # Высокосный год
                 date = '29-02'
 
         return date
