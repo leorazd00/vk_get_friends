@@ -108,9 +108,8 @@ class ParserFriends:
                 Возвращаемое значение:
                         return (dict): словарь с данными пользователя Vk
         '''
-        dict_fields = {'fields': 'country, bdate, city, sex'}
-        return self.session.method('friends.get', {'user_id': user_id,
-                                                   'fields': dict_fields['fields']})
+        dict_args = {'user_id': user_id, 'fields': 'country, bdate, city, sex'}
+        return self.session.method('friends.get', dict_args)
 
     def convert_birth_day(self, b_day: str) -> str:
         '''
