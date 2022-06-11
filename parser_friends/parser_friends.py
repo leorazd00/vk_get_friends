@@ -48,26 +48,26 @@ class ParserFriends:
         friends = self.get_friends(self.user_id)
 
         result_dict = {}
-        for i in tqdm(range(len(friends['items'])), desc='Progress:'):
-            first_name = friends['items'][i]['first_name']
-            last_name = friends['items'][i]['last_name']
+        for i in tqdm(range(len(friends)), desc='Progress:'):
+            first_name = friends[i]['first_name']
+            last_name = friends[i]['last_name']
 
             try:
-                country = friends['items'][i]['country']['title']
+                country = friends[i]['country']['title']
             except KeyError:
                 country = "NULL"
             try:
-                city = friends['items'][i]['city']['title']
+                city = friends[i]['city']['title']
             except KeyError:
                 city = "NULL"
 
             try:
-                bdate = friends['items'][i]['bdate']
+                bdate = friends[i]['bdate']
                 bdate = self.convert_birth_day(bdate)
             except KeyError:
                 bdate = "NULL"
 
-            sex = friends['items'][i]['sex']
+            sex = friends[i]['sex']
 
             if sex == 1:
                 sex = 'женский'
@@ -85,7 +85,7 @@ class ParserFriends:
 
         self.write_to_file(result_dict, path_to_save)
 
-    def get_friends(self, user_id: int) -> dict:
+    def get_friends(self, user_id: int) -> list:
         '''
         Возвращает словарь с данными пользователей Vk.
 
@@ -93,10 +93,18 @@ class ParserFriends:
                         user_id (int): ID пользователя
 
                 Возвращаемое значение:
-                        return (dict): словарь с данными пользователей Vk
+                        return (list): список со словарями,
+                                       данных пользователей Vk
         '''
         dict_args = {'user_id': user_id, 'fields': 'country, bdate, city, sex'}
-        return self.session.method('friends.get', dict_args)
+        req1 = self.session.method('friends.get', dict_args)['items']
+
+        if len(req1) == 5000:
+            dict_args['offset'] = 5000
+            req2 = self.session.method('friends.get', dict_args)['items']
+            return req1 + req2
+
+        return req1
 
     def convert_birth_day(self, b_day: str) -> str:
         '''
@@ -110,13 +118,21 @@ class ParserFriends:
         '''
         r = len(re.findall(r'[.]', b_day))
         if r == 2:
-            date = datetime.strptime(b_day, '%d.%m.%Y')
-            date.isoformat()
-            date = str(date)[:10]
+            try:
+                # Высокосный год
+                date = datetime.strptime(b_day, '%d.%m.%Y')
+                date.isoformat()
+                date = str(date)[:10]
+            except ValueError:
+                year = b_day[:-5:-1]
+                date = f'{year}-29-02'
         else:
-            date = datetime.strptime(b_day, '%d.%m')
-            date.isoformat()
-            date = str(date)[5:10]
+            try:
+                date = datetime.strptime(b_day, '%d.%m')
+                date.isoformat()
+                date = str(date)[5:10]
+            except ValueError:
+                date = '29-02'
 
         return date
 
